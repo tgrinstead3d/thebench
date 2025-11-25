@@ -1,7 +1,8 @@
 import { Filter, Search, Shield, UserPlus, X } from 'lucide-react';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import FilterSection from './components/FilterSection';
 import PlayerCard from './components/PlayerCard';
+import ThemeToggle from './components/ThemeToggle';
 
 // --- Placeholder Data ---
 const MOCK_PLAYERS = [
@@ -106,6 +107,18 @@ const MOCK_PLAYERS = [
 const App = () => {
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isDark, setIsDark] = useState(false);
+
+  // Theme Logic
+  useEffect(() => {
+    if (isDark) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [isDark]);
+
+  const toggleTheme = () => setIsDark(!isDark);
   
   // Filter States
   const [selectedPositions, setSelectedPositions] = useState([]);
@@ -139,37 +152,41 @@ const App = () => {
   }, [searchQuery, selectedPositions, selectedSkills]);
 
   return (
-    <div className="min-h-screen bg-slate-50 font-sans text-slate-900 selection:bg-blue-100">
+    <div className="min-h-screen bg-slate-50 dark:bg-neutral-900 font-sans text-slate-900 dark:text-neutral-100 selection:bg-red-100 dark:selection:bg-red-900 transition-colors duration-200">
       
       {/* --- Navbar --- */}
-      <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-slate-200 shadow-sm">
+      <header className="sticky top-0 z-40 bg-white/80 dark:bg-neutral-900/80 backdrop-blur-md border-b border-slate-200 dark:border-neutral-800 shadow-sm transition-colors duration-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center gap-2">
-              <div className="bg-blue-600 p-1.5 rounded-lg rotate-3">
+              <div className="bg-gradient-to-br from-red-600 to-orange-500 p-1.5 rounded-lg rotate-3 shadow-lg shadow-orange-500/20">
                 <Shield className="w-5 h-5 text-white" />
               </div>
-              <span className="text-xl font-bold tracking-tight text-slate-900">
-                The<span className="text-blue-600">Bench</span>
+              <span className="text-xl font-bold tracking-tight text-slate-900 dark:text-white">
+                The<span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-orange-500">Bench</span>
               </span>
             </div>
 
             <div className="hidden md:flex items-center space-x-6">
-              <a href="#" className="text-sm font-medium text-slate-500 hover:text-slate-900">Leagues</a>
-              <a href="#" className="text-sm font-medium text-slate-500 hover:text-slate-900">Teams</a>
-              <a href="#" className="text-sm font-medium text-slate-500 hover:text-slate-900">About</a>
-              <button className="flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors shadow-sm">
+              <a href="#" className="text-sm font-medium text-slate-500 hover:text-slate-900 dark:text-neutral-400 dark:hover:text-neutral-200">Leagues</a>
+              <a href="#" className="text-sm font-medium text-slate-500 hover:text-slate-900 dark:text-neutral-400 dark:hover:text-neutral-200">Teams</a>
+              <a href="#" className="text-sm font-medium text-slate-500 hover:text-slate-900 dark:text-neutral-400 dark:hover:text-neutral-200">About</a>
+              <ThemeToggle isDark={isDark} toggleTheme={toggleTheme} />
+              <button className="flex items-center gap-2 bg-gradient-to-r from-red-600 to-orange-500 hover:from-red-700 hover:to-orange-600 text-white text-sm font-medium px-4 py-2 rounded-lg transition-all shadow-md shadow-orange-500/20">
                 <UserPlus className="w-4 h-4" />
                 <span>Post Profile</span>
               </button>
             </div>
 
-            <button 
-              className="md:hidden p-2 text-slate-500"
-              onClick={() => setIsMobileFiltersOpen(!isMobileFiltersOpen)}
-            >
-              <Filter className="w-6 h-6" />
-            </button>
+            <div className="flex items-center gap-2 md:hidden">
+              <ThemeToggle isDark={isDark} toggleTheme={toggleTheme} />
+              <button 
+                className="p-2 text-slate-500 dark:text-neutral-400"
+                onClick={() => setIsMobileFiltersOpen(!isMobileFiltersOpen)}
+              >
+                <Filter className="w-6 h-6" />
+              </button>
+            </div>
           </div>
         </div>
       </header>
@@ -179,14 +196,14 @@ const App = () => {
         
         <div className="flex flex-col md:flex-row gap-4 mb-8 items-end justify-between">
             <div>
-                <h1 className="text-3xl font-bold text-slate-900 mb-2">Free Agent Pool</h1>
-                <p className="text-slate-500 max-w-2xl">
+                <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2">Free Agent Pool</h1>
+                <p className="text-slate-500 dark:text-neutral-400 max-w-2xl">
                     Find the missing piece for your squad. Browse available players, filter by skill level, and connect directly to build your roster for the upcoming season.
                 </p>
             </div>
              {/* Mobile-only "Post Profile" */}
             <div className="md:hidden w-full mt-4">
-                <button className="w-full flex justify-center items-center gap-2 bg-slate-900 text-white font-medium px-4 py-3 rounded-lg shadow-sm">
+                <button className="w-full flex justify-center items-center gap-2 bg-gradient-to-r from-red-600 to-orange-500 hover:from-red-700 hover:to-orange-600 text-white font-medium px-4 py-3 rounded-lg shadow-md shadow-orange-500/20">
                     <UserPlus className="w-4 h-4" />
                     Post Your Profile
                 </button>
@@ -200,9 +217,9 @@ const App = () => {
             lg:w-64 flex-shrink-0 
             ${isMobileFiltersOpen ? 'block' : 'hidden lg:block'}
           `}>
-            <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm sticky top-24">
+            <div className="bg-white dark:bg-neutral-800 p-5 rounded-xl border border-slate-200 dark:border-neutral-700 shadow-sm sticky top-24 transition-colors duration-200">
               <div className="flex items-center justify-between lg:hidden mb-4">
-                <h2 className="font-bold text-lg">Filters</h2>
+                <h2 className="font-bold text-lg dark:text-white">Filters</h2>
                 <button onClick={() => setIsMobileFiltersOpen(false)}>
                   <X className="w-5 h-5 text-slate-400" />
                 </button>
@@ -216,7 +233,7 @@ const App = () => {
                 <input
                   type="text"
                   placeholder="Search name or bio..."
-                  className="block w-full pl-10 pr-3 py-2 border border-slate-200 rounded-lg leading-5 bg-slate-50 placeholder-slate-400 focus:outline-none focus:bg-white focus:ring-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-150 ease-in-out"
+                  className="block w-full pl-10 pr-3 py-2 border border-slate-200 dark:border-neutral-600 rounded-lg leading-5 bg-slate-50 dark:bg-neutral-900 placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:bg-white dark:focus:bg-neutral-800 focus:ring-1 focus:ring-red-500 focus:border-red-500 dark:text-white sm:text-sm transition duration-150 ease-in-out"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
@@ -237,14 +254,14 @@ const App = () => {
               />
 
                {/* Stat Summary */}
-               <div className="mt-8 pt-6 border-t border-slate-100">
-                  <div className="flex justify-between items-center text-xs font-mono text-slate-500 mb-1">
+               <div className="mt-8 pt-6 border-t border-slate-100 dark:border-neutral-700">
+                  <div className="flex justify-between items-center text-xs font-mono text-slate-500 dark:text-neutral-400 mb-1">
                     <span>ACTIVE AGENTS</span>
-                    <span className="text-blue-600 font-bold">{MOCK_PLAYERS.length}</span>
+                    <span className="text-red-600 dark:text-red-400 font-bold">{MOCK_PLAYERS.length}</span>
                   </div>
-                  <div className="flex justify-between items-center text-xs font-mono text-slate-500">
+                  <div className="flex justify-between items-center text-xs font-mono text-slate-500 dark:text-neutral-400">
                     <span>TEAMS LOOKING</span>
-                    <span className="text-emerald-600 font-bold">12</span>
+                    <span className="text-emerald-600 dark:text-emerald-400 font-bold">12</span>
                   </div>
                </div>
             </div>
@@ -257,14 +274,14 @@ const App = () => {
             {(selectedPositions.length > 0 || selectedSkills.length > 0) && (
               <div className="flex flex-wrap gap-2 mb-6">
                 {[...selectedPositions, ...selectedSkills].map((filter) => (
-                  <span key={filter} className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                  <span key={filter} className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-200 border border-red-200 dark:border-red-800">
                     {filter}
                     <button 
                        onClick={() => {
                          if(selectedPositions.includes(filter)) toggleFilter(filter, selectedPositions, setSelectedPositions);
                          if(selectedSkills.includes(filter)) toggleFilter(filter, selectedSkills, setSelectedSkills);
                        }}
-                       className="ml-1.5 hover:text-blue-900"
+                       className="ml-1.5 hover:text-red-900 dark:hover:text-red-100"
                     >
                       <X className="w-3 h-3" />
                     </button>
@@ -272,7 +289,7 @@ const App = () => {
                 ))}
                 <button 
                   onClick={() => {setSelectedPositions([]); setSelectedSkills([]);}}
-                  className="text-xs text-slate-500 hover:text-slate-800 underline ml-2"
+                  className="text-xs text-slate-500 hover:text-slate-800 dark:text-neutral-400 dark:hover:text-neutral-200 underline ml-2"
                 >
                   Clear all
                 </button>
@@ -286,16 +303,16 @@ const App = () => {
                 ))}
               </div>
             ) : (
-              <div className="bg-white rounded-xl border border-dashed border-slate-300 p-12 text-center">
+              <div className="bg-white dark:bg-neutral-800 rounded-xl border border-dashed border-slate-300 dark:border-neutral-600 p-12 text-center transition-colors duration-200">
                 <div className="mx-auto h-12 w-12 text-slate-400 mb-4">
                    <UserPlus className="h-full w-full" />
                 </div>
-                <h3 className="mt-2 text-sm font-medium text-slate-900">No players found</h3>
-                <p className="mt-1 text-sm text-slate-500">Try adjusting your search or filters to find who you're looking for.</p>
+                <h3 className="mt-2 text-sm font-medium text-slate-900 dark:text-white">No players found</h3>
+                <p className="mt-1 text-sm text-slate-500 dark:text-neutral-400">Try adjusting your search or filters to find who you're looking for.</p>
                 <div className="mt-6">
                   <button 
                     onClick={() => {setSelectedPositions([]); setSelectedSkills([]); setSearchQuery("");}}
-                    className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                    className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-200 dark:bg-red-900/30 dark:text-red-200 dark:hover:bg-red-900/50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                   >
                     Clear Filters
                   </button>
@@ -307,22 +324,22 @@ const App = () => {
             {filteredPlayers.length > 0 && (
                 <div className="mt-10 flex justify-center">
                     <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
-                        <button className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-slate-300 bg-white text-sm font-medium text-slate-500 hover:bg-slate-50">
+                        <button className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-slate-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-sm font-medium text-slate-500 dark:text-neutral-400 hover:bg-slate-50 dark:hover:bg-neutral-700">
                             Previous
                         </button>
-                        <button className="relative inline-flex items-center px-4 py-2 border border-slate-300 bg-white text-sm font-medium text-slate-700 hover:bg-slate-50">
+                        <button className="relative inline-flex items-center px-4 py-2 border border-slate-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-sm font-medium text-slate-700 dark:text-neutral-200 hover:bg-slate-50 dark:hover:bg-neutral-700">
                             1
                         </button>
-                        <button className="relative inline-flex items-center px-4 py-2 border border-slate-300 bg-white text-sm font-medium text-slate-700 hover:bg-slate-50">
+                        <button className="relative inline-flex items-center px-4 py-2 border border-slate-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-sm font-medium text-slate-700 dark:text-neutral-200 hover:bg-slate-50 dark:hover:bg-neutral-700">
                             2
                         </button>
-                        <button className="relative inline-flex items-center px-4 py-2 border border-slate-300 bg-blue-50 text-sm font-medium text-blue-600 z-10">
+                        <button className="relative inline-flex items-center px-4 py-2 border border-slate-300 dark:border-neutral-600 bg-red-50 dark:bg-red-900/20 text-sm font-medium text-red-600 dark:text-red-400 z-10">
                             3
                         </button>
-                        <span className="relative inline-flex items-center px-4 py-2 border border-slate-300 bg-white text-sm font-medium text-slate-700">
+                        <span className="relative inline-flex items-center px-4 py-2 border border-slate-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-sm font-medium text-slate-700 dark:text-neutral-200">
                             ...
                         </span>
-                        <button className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-slate-300 bg-white text-sm font-medium text-slate-500 hover:bg-slate-50">
+                        <button className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-slate-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-sm font-medium text-slate-500 dark:text-neutral-400 hover:bg-slate-50 dark:hover:bg-neutral-700">
                             Next
                         </button>
                     </nav>

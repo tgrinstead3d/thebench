@@ -2,10 +2,10 @@ import React from 'react';
 
 const Badge = ({ children, color = "blue", icon: Icon }) => {
   const colors = {
-    blue: "bg-blue-50 text-blue-700 border-blue-200",
-    green: "bg-emerald-50 text-emerald-700 border-emerald-200",
-    gray: "bg-slate-100 text-slate-600 border-slate-200",
-    purple: "bg-purple-50 text-purple-700 border-purple-200",
+    blue: "bg-red-50 text-red-700 border-red-200 dark:bg-red-900/30 dark:text-red-300 dark:border-red-800",
+    green: "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-300 dark:border-emerald-800",
+    gray: "bg-slate-100 text-slate-600 border-slate-200 dark:bg-neutral-800 dark:text-neutral-400 dark:border-neutral-700",
+    purple: "bg-purple-50 text-purple-700 border-purple-200 dark:bg-purple-900/30 dark:text-purple-300 dark:border-purple-800",
   };
 
   return (
