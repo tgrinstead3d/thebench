@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import CookieBanner from './components/CookieBanner';
 import Footer from './components/Footer';
 import Navbar from './components/Navbar';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -9,11 +10,13 @@ import AboutPage from './pages/AboutPage';
 import CreateProfilePage from './pages/CreateProfilePage';
 import LoginPage from './pages/LoginPage';
 import PlayersPage from './pages/PlayersPage';
+import PrivacyPage from './pages/PrivacyPage';
 import RegisterTeamPage from './pages/RegisterTeamPage';
 import SignupPage from './pages/SignupPage';
 import TeamAdminPage from './pages/TeamAdminPage';
 import TeamDetailsPage from './pages/TeamDetailsPage';
 import TeamsPage from './pages/TeamsPage';
+import TermsPage from './pages/TermsPage';
 import UserDashboardPage from './pages/UserDashboardPage';
 
 const App = () => {
@@ -44,6 +47,8 @@ const App = () => {
               <Route path="/teams" element={<TeamsPage />} />
               <Route path="/teams/:teamId" element={<TeamDetailsPage />} />
               <Route path="/about" element={<AboutPage />} />
+              <Route path="/terms" element={<TermsPage />} />
+              <Route path="/privacy" element={<PrivacyPage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/signup" element={<SignupPage />} />
               
@@ -84,6 +89,7 @@ const App = () => {
           </main>
 
           <Footer />
+          <CookieBanner />
         </div>
       </BrowserRouter>
     </MockDataProvider>
