@@ -183,35 +183,43 @@ const INITIAL_TEAMS = [
 export const MockDataProvider = ({ children }) => {
   const [players, setPlayers] = useState(INITIAL_PLAYERS);
   const [teams, setTeams] = useState(INITIAL_TEAMS);
-  const [currentUser, setCurrentUser] = useState(null);
+  
+  const [currentUser, setCurrentUser] = useState({
+    id: 1,
+    name: "Alex Morgan",
+    email: "alex@example.com",
+    role: "Captain", // Upgraded to Captain
+    teamId: 6, // Assigned to "United FC" (matches ID 6 in INITIAL_TEAMS)
+    teamName: "United FC",
+    avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+    messages: [
+      {
+        id: 101,
+        from: "Coach Mike",
+        subject: "League Registration",
+        content: "Hey Alex, just a reminder that league registration closes this Friday. Make sure we have enough players on the roster.",
+        date: "2 hours ago",
+        read: false
+      },
+      {
+        id: 102,
+        from: "Sarah Jenkins",
+        subject: "Joining the team",
+        content: "Hi! I saw your team is looking for a midfielder. I played D1 in college and just moved to the area. Are you still holding tryouts?",
+        date: "1 day ago",
+        read: true
+      }
+    ]
+  });
 
-  // Mock Login
   const login = (email, password) => {
-    // Simulate API call
-    setCurrentUser({
-      id: 101,
-      name: "Alex Morgan",
-      email: email,
-      avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-      role: "Player",
-      teamId: null, // or a team ID if they are on one
-      messages: [
-        {
-            id: 1,
-            from: "Red Dragons FC",
-            content: "Hey Alex, saw your profile. We need a striker for Sunday league. Interested?",
-            date: "2 hours ago",
-            read: false
-        },
-        {
-            id: 2,
-            from: "System",
-            content: "Welcome to The Bench! Complete your profile to get noticed.",
-            date: "1 day ago",
-            read: true
-        }
-      ]
-    });
+    // Mock login - just sets the user
+    if (email && password) {
+      setCurrentUser({
+        ...currentUser,
+        email: email
+      });
+    }
   };
 
   const logout = () => {
@@ -226,8 +234,6 @@ export const MockDataProvider = ({ children }) => {
       joined: "Just now"
     };
     setPlayers([newPlayer, ...players]);
-    // Update current user to reflect they have a profile
-    setCurrentUser({ ...currentUser, ...playerData, hasProfile: true });
   };
 
   const addTeam = (teamData) => {
@@ -235,16 +241,33 @@ export const MockDataProvider = ({ children }) => {
       id: teams.length + 1,
       ...teamData,
       members: 1,
-      color: "bg-slate-800" // Default color
+      color: "bg-slate-800"
     };
     setTeams([newTeam, ...teams]);
-    setCurrentUser({ ...currentUser, teamId: newTeam.id, role: "Captain" });
   };
 
-  const sendMessage = (to, content) => {
-    // In a real app, this would send to the API
-    console.log(`Sending message to ${to}: ${content}`);
-    alert(`Message sent to ${to}!`);
+  const updateTeam = (teamId, updatedData) => {
+    setTeams(teams.map(team => 
+      team.id === teamId ? { ...team, ...updatedData } : team
+    ));
+  };
+
+  const sendMessage = (toName, content) => {
+    console.log(`Message sent to ${toName}: ${content}`);
+    alert(`Message sent to ${toName}!`);
+  };
+
+  const markMessageAsRead = (messageId) => {
+    if (!currentUser) return;
+    const updatedMessages = currentUser.messages.map(msg => 
+      msg.id === messageId ? { ...msg, read: true } : msg
+    );
+    setCurrentUser({ ...currentUser, messages: updatedMessages });
+  };
+
+  const replyToMessage = (messageId, content) => {
+    console.log(`Replying to message ${messageId}: ${content}`);
+    alert("Reply sent!");
   };
 
   const value = {
@@ -255,7 +278,10 @@ export const MockDataProvider = ({ children }) => {
     logout,
     addPlayer,
     addTeam,
-    sendMessage
+    updateTeam,
+    sendMessage,
+    markMessageAsRead,
+    replyToMessage
   };
 
   return (

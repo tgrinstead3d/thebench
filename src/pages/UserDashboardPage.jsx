@@ -1,21 +1,42 @@
-import { CheckCircle, Clock, Mail, Shield, User } from 'lucide-react';
-import React from 'react';
+import { CheckCircle, ChevronDown, ChevronUp, Clock, Mail, Send, Settings, Shield, User } from 'lucide-react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useMockData } from '../context/MockDataContext';
 
 const UserDashboardPage = () => {
-  const { currentUser, teams } = useMockData();
+  const { currentUser, teams, markMessageAsRead, replyToMessage } = useMockData();
+  const [expandedMessageId, setExpandedMessageId] = useState(null);
+  const [replyContent, setReplyContent] = useState('');
 
   if (!currentUser) {
     return (
       <div className="text-center py-12">
         <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Please log in to view your dashboard.</h2>
-        <Link to="/login" className="text-red-600 hover:text-red-500 mt-4 inline-block">Log In</Link>
+        <Link to="/login" className="text-red-600 hover:text-red-500 mt-4 inline-block cursor-pointer">Log In</Link>
       </div>
     );
   }
 
   const myTeam = currentUser.teamId ? teams.find(t => t.id === currentUser.teamId) : null;
+
+  const toggleMessage = (msg) => {
+    if (expandedMessageId === msg.id) {
+      setExpandedMessageId(null);
+    } else {
+      setExpandedMessageId(msg.id);
+      if (!msg.read) {
+        markMessageAsRead(msg.id);
+      }
+    }
+    setReplyContent('');
+  };
+
+  const handleReply = (e, msgId) => {
+    e.preventDefault();
+    replyToMessage(msgId, replyContent);
+    setReplyContent('');
+    setExpandedMessageId(null);
+  };
 
   return (
     <div className="max-w-6xl mx-auto">
@@ -84,9 +105,19 @@ const UserDashboardPage = () => {
                     <p className="text-xs text-slate-500 dark:text-neutral-400">{myTeam.league}</p>
                   </div>
                 </div>
-                <Link to={`/teams/${myTeam.id}`} className="text-sm text-red-600 dark:text-red-400 hover:underline cursor-pointer">
-                  View Team Page
-                </Link>
+                
+                <div className="space-y-2">
+                  <Link to={`/teams/${myTeam.id}`} className="block w-full text-center py-2 px-4 border border-slate-200 dark:border-neutral-700 rounded-lg text-sm font-medium text-slate-700 dark:text-neutral-300 hover:bg-slate-50 dark:hover:bg-neutral-700 transition-colors cursor-pointer">
+                    View Team Page
+                  </Link>
+                  
+                  {currentUser.role === 'Captain' && (
+                    <Link to="/team-admin" className="block w-full text-center py-2 px-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-lg text-sm font-medium hover:bg-slate-800 dark:hover:bg-slate-100 transition-colors cursor-pointer flex items-center justify-center gap-2">
+                      <Settings className="w-4 h-4" />
+                      Manage Team
+                    </Link>
+                  )}
+                </div>
               </div>
             ) : (
               <div className="text-center py-4">
@@ -115,19 +146,62 @@ const UserDashboardPage = () => {
             <div className="divide-y divide-slate-100 dark:divide-neutral-700">
               {currentUser.messages && currentUser.messages.length > 0 ? (
                 currentUser.messages.map((msg) => (
-                  <div key={msg.id} className={`p-4 hover:bg-slate-50 dark:hover:bg-neutral-700/50 transition-colors cursor-pointer ${!msg.read ? 'bg-slate-50/50 dark:bg-neutral-700/20' : ''}`}>
-                    <div className="flex justify-between items-start mb-1">
-                      <h4 className={`text-sm font-medium ${!msg.read ? 'text-slate-900 dark:text-white font-bold' : 'text-slate-700 dark:text-neutral-300'}`}>
-                        {msg.from}
-                      </h4>
-                      <span className="text-xs text-slate-400 flex items-center gap-1">
-                        <Clock className="w-3 h-3" />
-                        {msg.date}
-                      </span>
+                  <div key={msg.id} className={`transition-colors ${!msg.read ? 'bg-slate-50/50 dark:bg-neutral-700/20' : ''}`}>
+                    <div 
+                      onClick={() => toggleMessage(msg)}
+                      className="p-4 cursor-pointer hover:bg-slate-50 dark:hover:bg-neutral-700/50 flex justify-between items-start"
+                    >
+                      <div className="flex-grow pr-4">
+                        <div className="flex items-center gap-2 mb-1">
+                          <h4 className={`text-sm font-medium ${!msg.read ? 'text-slate-900 dark:text-white font-bold' : 'text-slate-700 dark:text-neutral-300'}`}>
+                            {msg.from}
+                          </h4>
+                          {!msg.read && <span className="w-2 h-2 rounded-full bg-red-500"></span>}
+                        </div>
+                        <p className="text-sm font-medium text-slate-800 dark:text-neutral-200 mb-1">{msg.subject}</p>
+                        <p className="text-xs text-slate-500 dark:text-neutral-400 line-clamp-1">
+                          {msg.content}
+                        </p>
+                      </div>
+                      <div className="flex flex-col items-end gap-2">
+                        <span className="text-xs text-slate-400 flex items-center gap-1 whitespace-nowrap">
+                          <Clock className="w-3 h-3" />
+                          {msg.date}
+                        </span>
+                        {expandedMessageId === msg.id ? (
+                          <ChevronUp className="w-4 h-4 text-slate-400" />
+                        ) : (
+                          <ChevronDown className="w-4 h-4 text-slate-400" />
+                        )}
+                      </div>
                     </div>
-                    <p className="text-sm text-slate-600 dark:text-neutral-400 line-clamp-2">
-                      {msg.content}
-                    </p>
+
+                    {expandedMessageId === msg.id && (
+                      <div className="px-4 pb-4 pt-0 pl-4 ml-4 border-l-2 border-slate-200 dark:border-neutral-700">
+                        <div className="bg-slate-50 dark:bg-neutral-900/50 rounded-lg p-4 mb-4 text-sm text-slate-700 dark:text-neutral-300">
+                          {msg.content}
+                        </div>
+                        
+                        <form onSubmit={(e) => handleReply(e, msg.id)} className="flex gap-2">
+                          <input
+                            type="text"
+                            placeholder="Write a reply..."
+                            className="flex-grow px-3 py-2 text-sm border border-slate-200 dark:border-neutral-700 rounded-lg bg-white dark:bg-neutral-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                            value={replyContent}
+                            onChange={(e) => setReplyContent(e.target.value)}
+                            onClick={(e) => e.stopPropagation()}
+                          />
+                          <button 
+                            type="submit"
+                            className="bg-red-600 hover:bg-red-700 text-white p-2 rounded-lg transition-colors cursor-pointer"
+                            disabled={!replyContent.trim()}
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <Send className="w-4 h-4" />
+                          </button>
+                        </form>
+                      </div>
+                    )}
                   </div>
                 ))
               ) : (

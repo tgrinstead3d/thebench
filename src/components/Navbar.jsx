@@ -1,4 +1,4 @@
-import { LogOut, Menu, Shield, User, UserPlus, X } from 'lucide-react';
+import { ChevronDown, LogOut, Menu, Shield, User, UserPlus, X } from 'lucide-react';
 import React, { useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useMockData } from '../context/MockDataContext';
@@ -49,31 +49,46 @@ const Navbar = ({ isDark, toggleTheme }) => {
             <ThemeToggle isDark={isDark} toggleTheme={toggleTheme} />
             
             {currentUser ? (
-              <div className="relative">
+              <div className="relative ml-4">
                 <button 
                   onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
                   className="flex items-center gap-2 focus:outline-none cursor-pointer"
                 >
-                  <img 
-                    src={currentUser.avatar} 
-                    alt={currentUser.name} 
-                    className="w-8 h-8 rounded-full border border-slate-200 dark:border-neutral-700"
-                  />
-                  <span className="text-sm font-medium text-slate-700 dark:text-neutral-200">{currentUser.name}</span>
+                  <div className="relative">
+                    <img 
+                      src={currentUser.avatar} 
+                      alt={currentUser.name} 
+                      className="w-9 h-9 rounded-full object-cover border-2 border-slate-200 dark:border-neutral-700 hover:border-red-500 transition-colors"
+                    />
+                    {currentUser.messages?.some(m => !m.read) && (
+                      <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-600 rounded-full border-2 border-white dark:border-neutral-900"></span>
+                    )}
+                  </div>
+                  <span className="hidden md:block text-sm font-medium text-slate-700 dark:text-neutral-200">{currentUser.name}</span>
+                  <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${isUserMenuOpen ? 'rotate-180' : ''}`} />
                 </button>
 
                 {isUserMenuOpen && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-neutral-800 rounded-lg shadow-lg border border-slate-100 dark:border-neutral-700 py-1">
+                  <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-neutral-800 rounded-xl shadow-lg border border-slate-100 dark:border-neutral-700 py-1 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                    <div className="px-4 py-2 border-b border-slate-100 dark:border-neutral-700">
+                      <p className="text-xs text-slate-500 dark:text-neutral-400">Signed in as</p>
+                      <p className="text-sm font-bold text-slate-900 dark:text-white truncate">{currentUser.email}</p>
+                    </div>
                     <Link 
                       to="/dashboard" 
-                      className="block px-4 py-2 text-sm text-slate-700 dark:text-neutral-200 hover:bg-slate-50 dark:hover:bg-neutral-700 cursor-pointer"
+                      className="block px-4 py-2 text-sm text-slate-700 dark:text-neutral-300 hover:bg-slate-50 dark:hover:bg-neutral-700 cursor-pointer flex justify-between items-center"
                       onClick={() => setIsUserMenuOpen(false)}
                     >
                       Dashboard
+                      {currentUser.messages?.some(m => !m.read) && (
+                         <span className="bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 text-xs font-bold px-1.5 py-0.5 rounded-full">
+                           {currentUser.messages.filter(m => !m.read).length}
+                         </span>
+                      )}
                     </Link>
                     <Link 
                       to="/create-profile" 
-                      className="block px-4 py-2 text-sm text-slate-700 dark:text-neutral-200 hover:bg-slate-50 dark:hover:bg-neutral-700 cursor-pointer"
+                      className="block px-4 py-2 text-sm text-slate-700 dark:text-neutral-300 hover:bg-slate-50 dark:hover:bg-neutral-700 cursor-pointer"
                       onClick={() => setIsUserMenuOpen(false)}
                     >
                       Edit Profile
@@ -81,7 +96,7 @@ const Navbar = ({ isDark, toggleTheme }) => {
                     {currentUser.role === 'Captain' && (
                       <Link 
                         to="/team-admin" 
-                        className="block px-4 py-2 text-sm text-slate-700 dark:text-neutral-200 hover:bg-slate-50 dark:hover:bg-neutral-700 cursor-pointer"
+                        className="block px-4 py-2 text-sm text-slate-700 dark:text-neutral-300 hover:bg-slate-50 dark:hover:bg-neutral-700 cursor-pointer"
                         onClick={() => setIsUserMenuOpen(false)}
                       >
                         Team Admin
@@ -89,9 +104,9 @@ const Navbar = ({ isDark, toggleTheme }) => {
                     )}
                     <button 
                       onClick={handleLogout}
-                      className="block w-full text-left px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-slate-50 dark:hover:bg-neutral-700 cursor-pointer"
+                      className="block w-full text-left px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 cursor-pointer"
                     >
-                      Sign out
+                      Sign Out
                     </button>
                   </div>
                 )}

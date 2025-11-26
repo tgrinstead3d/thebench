@@ -6,9 +6,13 @@ import PlayerCard from '../components/PlayerCard';
 import { useMockData } from '../context/MockDataContext';
 
 const PlayersPage = () => {
-  const { players } = useMockData();
+  const { players, teams } = useMockData();
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  
+  // Stats Calculation
+  const activeAgentsCount = players.filter(p => p.status === 'Free Agent').length;
+  const teamsLookingCount = teams.filter(t => t.lookingFor && t.lookingFor.length > 0).length;
   
   // Filter States
   const [selectedPositions, setSelectedPositions] = useState([]);
@@ -114,11 +118,11 @@ const PlayersPage = () => {
                <div className="mt-8 pt-6 border-t border-slate-100 dark:border-neutral-700">
                   <div className="flex justify-between items-center text-xs font-mono text-slate-500 dark:text-neutral-400 mb-1">
                     <span>ACTIVE AGENTS</span>
-                    <span className="text-red-600 dark:text-red-400 font-bold">{players.length}</span>
+                    <span className="text-red-600 dark:text-red-400 font-bold">{activeAgentsCount}</span>
                   </div>
                   <div className="flex justify-between items-center text-xs font-mono text-slate-500 dark:text-neutral-400">
                     <span>TEAMS LOOKING</span>
-                    <span className="text-emerald-600 dark:text-emerald-400 font-bold">12</span>
+                    <span className="text-emerald-600 dark:text-emerald-400 font-bold">{teamsLookingCount}</span>
                   </div>
                </div>
             </div>

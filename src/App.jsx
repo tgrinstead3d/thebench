@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import Footer from './components/Footer';
 import Navbar from './components/Navbar';
 import ProtectedRoute from './components/ProtectedRoute';
 import { MockDataProvider } from './context/MockDataContext';
+// import { SupabaseDataProvider } from './context/SupabaseDataContext'; // Uncomment to use Supabase
 import AboutPage from './pages/AboutPage';
 import CreateProfilePage from './pages/CreateProfilePage';
 import LoginPage from './pages/LoginPage';
@@ -31,12 +33,12 @@ const App = () => {
   return (
     <MockDataProvider>
       <BrowserRouter>
-        <div className="min-h-screen bg-slate-50 dark:bg-neutral-900 font-sans text-slate-900 dark:text-neutral-100 selection:bg-red-100 dark:selection:bg-red-900 transition-colors duration-200">
+        <div className="min-h-screen bg-slate-50 dark:bg-neutral-900 font-sans text-slate-900 dark:text-neutral-100 selection:bg-red-100 dark:selection:bg-red-900 transition-colors duration-200 flex flex-col">
           
           <Navbar isDark={isDark} toggleTheme={toggleTheme} />
 
           {/* --- Main Content --- */}
-          <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
             <Routes>
               <Route path="/" element={<PlayersPage />} />
               <Route path="/teams" element={<TeamsPage />} />
@@ -80,6 +82,8 @@ const App = () => {
               />
             </Routes>
           </main>
+
+          <Footer />
         </div>
       </BrowserRouter>
     </MockDataProvider>
