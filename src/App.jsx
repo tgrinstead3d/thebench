@@ -11,11 +11,7 @@ import CreateProfilePage from './pages/CreateProfilePage';
 import LoginPage from './pages/LoginPage';
 import PlayersPage from './pages/PlayersPage';
 import PrivacyPage from './pages/PrivacyPage';
-import RegisterTeamPage from './pages/RegisterTeamPage';
 import SignupPage from './pages/SignupPage';
-import TeamAdminPage from './pages/TeamAdminPage';
-import TeamDetailsPage from './pages/TeamDetailsPage';
-import TeamsPage from './pages/TeamsPage';
 import TermsPage from './pages/TermsPage';
 import UserDashboardPage from './pages/UserDashboardPage';
 
@@ -44,8 +40,6 @@ const App = () => {
           <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
             <Routes>
               <Route path="/" element={<PlayersPage />} />
-              <Route path="/teams" element={<TeamsPage />} />
-              <Route path="/teams/:teamId" element={<TeamDetailsPage />} />
               <Route path="/about" element={<AboutPage />} />
               <Route path="/terms" element={<TermsPage />} />
               <Route path="/privacy" element={<PrivacyPage />} />
@@ -66,22 +60,6 @@ const App = () => {
                 element={
                   <ProtectedRoute>
                     <CreateProfilePage />
-                  </ProtectedRoute>
-                } 
-              />
-              <Route 
-                path="/register-team" 
-                element={
-                  <ProtectedRoute>
-                    <RegisterTeamPage />
-                  </ProtectedRoute>
-                } 
-              />
-              <Route 
-                path="/team-admin" 
-                element={
-                  <ProtectedRoute>
-                    <TeamAdminPage />
                   </ProtectedRoute>
                 } 
               />

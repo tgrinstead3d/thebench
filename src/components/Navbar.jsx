@@ -43,7 +43,6 @@ const Navbar = ({ isDark, toggleTheme }) => {
           {/* Desktop Nav */}
           <div className="hidden md:flex items-center space-x-8">
             <NavItem to="/">Players</NavItem>
-            <NavItem to="/teams">Teams</NavItem>
             <NavItem to="/about">About</NavItem>
             <div className="h-4 w-px bg-slate-200 dark:bg-neutral-700"></div>
             <ThemeToggle isDark={isDark} toggleTheme={toggleTheme} />
@@ -60,9 +59,6 @@ const Navbar = ({ isDark, toggleTheme }) => {
                       alt={currentUser.name} 
                       className="w-9 h-9 rounded-full object-cover border-2 border-slate-200 dark:border-neutral-700 hover:border-red-500 transition-colors"
                     />
-                    {currentUser.messages?.some(m => !m.read) && (
-                      <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-600 rounded-full border-2 border-white dark:border-neutral-900"></span>
-                    )}
                   </div>
                   <span className="hidden md:block text-sm font-medium text-slate-700 dark:text-neutral-200">{currentUser.name}</span>
                   <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${isUserMenuOpen ? 'rotate-180' : ''}`} />
@@ -80,11 +76,6 @@ const Navbar = ({ isDark, toggleTheme }) => {
                       onClick={() => setIsUserMenuOpen(false)}
                     >
                       Dashboard
-                      {currentUser.messages?.some(m => !m.read) && (
-                         <span className="bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 text-xs font-bold px-1.5 py-0.5 rounded-full">
-                           {currentUser.messages.filter(m => !m.read).length}
-                         </span>
-                      )}
                     </Link>
                     <Link 
                       to="/create-profile" 
@@ -93,18 +84,9 @@ const Navbar = ({ isDark, toggleTheme }) => {
                     >
                       Edit Profile
                     </Link>
-                    {currentUser.role === 'Captain' && (
-                      <Link 
-                        to="/team-admin" 
-                        className="block px-4 py-2 text-sm text-slate-700 dark:text-neutral-300 hover:bg-slate-50 dark:hover:bg-neutral-700 cursor-pointer"
-                        onClick={() => setIsUserMenuOpen(false)}
-                      >
-                        Team Admin
-                      </Link>
-                    )}
                     <button 
                       onClick={handleLogout}
-                      className="block w-full text-left px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 cursor-pointer"
+                      className="block w-full text-left px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-slate-50 dark:hover:bg-neutral-800 cursor-pointer"
                     >
                       Sign Out
                     </button>
@@ -147,13 +129,6 @@ const Navbar = ({ isDark, toggleTheme }) => {
               onClick={() => setIsMobileMenuOpen(false)}
             >
               Players
-            </Link>
-            <Link 
-              to="/teams" 
-              className="block px-3 py-2 rounded-md text-base font-medium text-slate-700 dark:text-neutral-200 hover:bg-slate-50 dark:hover:bg-neutral-800 cursor-pointer"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Teams
             </Link>
             <Link 
               to="/about" 

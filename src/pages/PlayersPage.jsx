@@ -12,7 +12,6 @@ const PlayersPage = () => {
   
   // Stats Calculation
   const activeAgentsCount = players.filter(p => p.status === 'Free Agent').length;
-  const teamsLookingCount = teams.filter(t => t.lookingFor && t.lookingFor.length > 0).length;
   
   // Filter States
   const [selectedPositions, setSelectedPositions] = useState([]);
@@ -119,10 +118,6 @@ const PlayersPage = () => {
                   <div className="flex justify-between items-center text-xs font-mono text-slate-500 dark:text-neutral-400 mb-1">
                     <span>ACTIVE AGENTS</span>
                     <span className="text-red-600 dark:text-red-400 font-bold">{activeAgentsCount}</span>
-                  </div>
-                  <div className="flex justify-between items-center text-xs font-mono text-slate-500 dark:text-neutral-400">
-                    <span>TEAMS LOOKING</span>
-                    <span className="text-emerald-600 dark:text-emerald-400 font-bold">{teamsLookingCount}</span>
                   </div>
                </div>
             </div>

@@ -15,6 +15,7 @@ const CreateProfilePage = () => {
     age: '',
     availability: '',
     bio: '',
+    facebookUsername: currentUser?.facebookUsername || '',
     avatar: currentUser?.avatar || null
   });
 
@@ -198,6 +199,23 @@ const CreateProfilePage = () => {
               value={formData.bio}
               onChange={(e) => setFormData({...formData, bio: e.target.value})}
             />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-slate-700 dark:text-neutral-300 mb-1">Facebook Username</label>
+            <div className="relative">
+              <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400 dark:text-neutral-500 text-sm">
+                m.me/
+              </span>
+              <input
+                type="text"
+                placeholder="username"
+                className="block w-full pl-16 pr-3 py-2 border border-slate-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-900 text-slate-900 dark:text-white focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                value={formData.facebookUsername}
+                onChange={(e) => setFormData({...formData, facebookUsername: e.target.value})}
+              />
+            </div>
+            <p className="mt-1 text-xs text-slate-500 dark:text-neutral-400">This allows teams to message you directly on Facebook.</p>
           </div>
         </div>
 

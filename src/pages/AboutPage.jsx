@@ -9,7 +9,7 @@ const AboutPage = () => {
           We Connect Players with Teams
         </h1>
         <p className="text-xl text-slate-500 dark:text-neutral-400 max-w-2xl mx-auto">
-          The Bench is the premier platform for amateur soccer players to find teams, and for teams to find the talent they need to win.
+          The Bench is the premier platform for amateur soccer players to find teams. Create a profile, get seen, and get on the field.
         </p>
       </div>
 
@@ -18,9 +18,9 @@ const AboutPage = () => {
             <div className="w-12 h-12 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mx-auto mb-4 text-red-600 dark:text-red-400">
                 <Users className="w-6 h-6" />
             </div>
-            <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Build Your Squad</h3>
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Get Discovered</h3>
             <p className="text-slate-500 dark:text-neutral-400">
-                Captains can browse a pool of available free agents to fill gaps in their roster before the season starts.
+                Create a detailed profile highlighting your skills, experience, and availability for captains to see.
             </p>
         </div>
         <div className="bg-white dark:bg-neutral-800 p-6 rounded-xl border border-slate-200 dark:border-neutral-700 shadow-sm text-center">
@@ -29,16 +29,16 @@ const AboutPage = () => {
             </div>
             <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Find Your Level</h3>
             <p className="text-slate-500 dark:text-neutral-400">
-                Whether you're a former pro or just starting out, filter by skill level to find the perfect competitive fit.
+                Whether you're a former pro or just starting out, show your level to find the perfect competitive fit.
             </p>
         </div>
         <div className="bg-white dark:bg-neutral-800 p-6 rounded-xl border border-slate-200 dark:border-neutral-700 shadow-sm text-center">
             <div className="w-12 h-12 bg-emerald-100 dark:bg-emerald-900/30 rounded-full flex items-center justify-center mx-auto mb-4 text-emerald-600 dark:text-emerald-400">
                 <Heart className="w-6 h-6" />
             </div>
-            <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Play More</h3>
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Connect Directly</h3>
             <p className="text-slate-500 dark:text-neutral-400">
-                Stop sitting at home. Get matched, get on the field, and enjoy the beautiful game with new friends.
+                Link your Facebook account so interested teams can message you directly to arrange a tryout.
             </p>
         </div>
       </div>
@@ -48,14 +48,11 @@ const AboutPage = () => {
         <div className="relative z-10">
             <h2 className="text-3xl font-bold text-white mb-4">Ready to get started?</h2>
             <p className="text-slate-300 mb-8 max-w-xl mx-auto">
-                Join thousands of players and captains already using The Bench to organize their leagues.
+                Join the growing community of players using The Bench to find their next team.
             </p>
-            <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <button className="bg-gradient-to-r from-red-600 to-orange-500 hover:from-red-700 hover:to-orange-600 text-white font-bold py-3 px-8 rounded-lg shadow-lg shadow-orange-500/20 transition-all">
+            <div className="flex justify-center">
+                <button className="bg-gradient-to-r from-red-600 to-orange-500 hover:from-red-700 hover:to-orange-600 text-white font-bold py-3 px-8 rounded-lg shadow-lg shadow-orange-500/20 transition-all cursor-pointer">
                     Create Player Profile
-                </button>
-                <button className="bg-transparent border border-slate-600 text-white hover:bg-white/10 font-bold py-3 px-8 rounded-lg transition-all">
-                    Register a Team
                 </button>
             </div>
         </div>
